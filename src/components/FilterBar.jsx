@@ -1,6 +1,24 @@
 import React from "react";
 
 export default function FilterBar({ filters, onFilterChange, channelPartners, onRefresh }) {
+  const handleToday = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const dateStr = `${yyyy}-${mm}-${dd}`;
+    onFilterChange({ ...filters, from: dateStr, to: dateStr });
+  };
+
+  const isToday = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const dateStr = `${yyyy}-${mm}-${dd}`;
+    return filters.from === dateStr && filters.to === dateStr;
+  };
+
   return (
     <div className="filter-bar">
       <div className="filter-group">
@@ -45,6 +63,19 @@ export default function FilterBar({ filters, onFilterChange, channelPartners, on
       </div>
 
       <div className="filter-actions">
+        <button
+          className={`btn-today ${isToday() ? "btn-today-active" : ""}`}
+          onClick={handleToday}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <circle cx="12" cy="16" r="2" />
+          </svg>
+          Today
+        </button>
         <button
           className="btn-reset"
           onClick={() => onFilterChange({ cp: "", from: "", to: "" })}
